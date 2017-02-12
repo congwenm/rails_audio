@@ -5,6 +5,7 @@ class AudiosController < ApplicationController
   # GET /audios.json
   def index
     @audios = Audio.all
+    @repositories = Settings.repositories ||= []
   end
 
   # GET /audios/1
@@ -61,6 +62,7 @@ class AudiosController < ApplicationController
     end
   end
 
+  # we need a method to create database entries for the files in our Repositories. Edit the Audio controller and add this method
   def sync_repo
     repo = Settings.repositories[params[:id].to_i]
 
@@ -79,6 +81,14 @@ class AudiosController < ApplicationController
     redirect_to audios_path
   end
 
+  def stream
+    audio = Audio.find(params[:id])
+    if audio
+      # sends w/e file you like to browse, usually zip and pdf, etc.
+      send_file audio.path
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_audio
@@ -87,6 +97,7 @@ class AudiosController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def audio_params
-      params.fetch(:audio, {})
+      # params.fetch(:audio, {})
+      params[:audio].permit(:name, :path)
     end
 end

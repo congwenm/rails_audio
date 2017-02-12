@@ -1,16 +1,16 @@
 class SettingsController < ApplicationController
 
   def index
-    @repositories = SEttings.repositories ||= []
+    @repositories = Settings.repositories ||= []
   end
 
   def create
     if Settings.repositories
-      Settings.repositories = Settings.repositories << settings_params[:repositories][0]      
+      Settings.repositories = Settings.repositories << settings_params[:repositories][0]
     else
       Settings.repositories = settings_params[:repositories]
     end
-    
+
     respond_to do |format|
       @repositories = Settings.repositories
 
